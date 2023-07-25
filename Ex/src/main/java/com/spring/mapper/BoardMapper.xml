@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- mapper의 namespace 속성은 연결할 mapper의 interface를 풀 경로로 작성 -->
+<mapper namespace="com.spring.mapper.BoardMapper">
+  <!-- 
+		select 태그 작성
+			id			: mapper의 메소드명
+			resultType 	: 기본 타입, 객체 타입 (select 쿼리의 결과를 특정 클래스의 객체로 저장)
+						    쿼리 실행 결과를 resultType의 속성에 저장
+			CDATA		: 파서가 마크업이 아닌 문자로만 해석할 수 있도록 처리 
+						  XML에서 부등호를 사용하기 위해 사용
+   -->
+  <select id="getList" resultType="com.spring.vo.Board">
+  	SELECT * FROM (
+  		SELECT T.*, ROWNUM RNUM FROM (
+			SELECT * FROM TBL_BOARD WHERE 1 = 1
+			<include refid="criteria"></include> 
+			ORDER BY BNO DESC
+		) T
+	) WHERE RNUM BETWEEN #{startnum} AND #{endnum}
+  </select> 
+  
+  <!-- 
+		동적 쿼리 작성
+			Mybatis는 내부적으로 PreparedStatement를 활용한다.
+			? -> #{속성}					
+			쿼리 작성시 필요한 정보는 메소드의 매개 변수를 통해 받아올 수 있다.
+   -->
+  <!-- 
+  <insert id="insert">
+  	INSERT INTO TBL_BOARD (BNO, TITLE, CONTENT, WRITER) 
+  	VALUES (SEQ_BOARD.NEXTVAL, #{title}, #{content}, #{writer})
+  </insert>
+   -->
+  
+  <!-- 
+  		selectKey
+  			생성된 시퀀스 값을 VO 객체의 속성에 저장 후 사용
+   -->
+  <insert id="insert">
+	<selectKey keyProperty="bno" order="BEFORE" resultType="int">
+		SELECT SEQ_BOARD.NEXTVAL FROM DUAL
+	</selectKey>
+		INSERT INTO TBL_BOARD (BNO, TITLE, CONTENT, WRITER) 
+		VALUES (#{bno}, #{title}, #{content}, #{writer})
+  </insert>
+  
+  <select id="read" resultType="com.spring.vo.Board">
+  	SELECT * FROM TBL_BOARD WHERE BNO = #{bno}
+  </select>
+  
+  <delete id="delete">
+  	DELETE FROM TBL_BOARD WHERE BNO = #{bno}
+  </delete>
+  
+  <update id="update">
+  	UPDATE TBL_BOARD 
+  	SET TITLE = #{title}, CONTENT = #{content}, WRITER = #{writer}, UPDATEDATE = SYSDATE 
+  	WHERE BNO = #{bno}
+  </update>
+  
+  <select id="getTotal" resultType="int">
+  	SELECT COUNT(*) FROM TBL_BOARD WHERE 1 = 1
+  	<include refid="criteria"></include>
+  </select>
+  
+  <update id="updateReplyCnt">
+  	UPDATE TBL_BOARD SET REPLYCNT = REPLYCNT+#{amount} WHERE BNO = #{bno}
+  </update>
+  
+  <!-- 
+  		반복되는 쿼리를 미리 작성해 놓고 재활용
+  			반복할 쿼리 선언 : <sql id="">
+  			선언한 쿼리 사용 : <include refid="">
+  			변수 사용 방법 : <property name="">
+   -->
+  <sql id="criteria">
+  	<choose>
+  		<when test="searchfield=='title'">
+  			AND TITLE LIKE '%'||#{searchword}||'%'
+  		</when>
+  		<when test="searchfield=='writer'">
+  			AND WRITER LIKE '%'||#{searchword}||'%'
+  		</when>
+  		<when test="searchfield=='content'">
+  			AND CONTENT LIKE '%'||#{searchword}||'%'
+  		</when>
+  	</choose>
+  </sql>
+</mapper>

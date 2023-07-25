@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace="인터페이스명 (패키지를 포함한 경로)" -->
+<mapper namespace="com.spring.mapper.TimeMapper">
+  <!-- id="메소드명" 반환타입="기본타입 또는 객체명 (패키지를 포함한 경로)" -->
+  <select id="getTimeByXml" resultType="String">
+  	SELECT SYSDATE FROM DUAL
+  </select>	
+</mapper>
