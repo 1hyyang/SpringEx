@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- mapper의 namespace 속성은 연결할 mapper의 interface를 풀 경로로 작성 -->
+<mapper namespace="com.healpio.mapper.AttachMapper">
+  <insert id="insert">
+  	insert into attach
+  	values (#{uuid}, #{uploadpath}, #{filename}, #{filetype}, #{class_no})
+  </insert>
+  <!-- 
+  <select id="getList" resultType="com.healpio.vo.Attach">
+  	select t.* 
+  	, uploadpath||uuid||'_'||filename filepath 
+  	, decode(filetype, 'I', uploadpath||'thumb_'||uuid||'_'||filename, '') thumb_filepath 
+  	from attach t 
+  	where bno = #{bno}
+  </select>
+
+  <delete id="delete">
+  	delete attach where uuid = #{uuid} and bno = #{bno} 
+  </delete>
+  
+  <select id="selectOne" resultType="com.healpio.vo.Attach">
+  	select t.* 
+  	, uploadpath||uuid||'_'||filename filepath 
+  	, decode(filetype, 'I', uploadpath||'thumb_'||uuid||'_'||filename, '') thumb_filepath 
+  	from attach t 
+  	where uuid = #{uuid} and bno = #{bno}
+  </select>
+   -->
+</mapper>
