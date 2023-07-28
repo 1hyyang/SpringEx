@@ -89,9 +89,6 @@ public class FileuploadController extends CommonRestController{
 	@GetMapping("/file/delete/{uuid}/{bno}")
 	public @ResponseBody Map<String, Object> delete(@PathVariable("uuid") String uuid
 													, @PathVariable("bno") int bno){
-		// 디렉토리에서 삭제
-		
-		// DB에서 삭제	
 		return responseDeleteMap(service.delete(uuid, bno));
 	}
 	
