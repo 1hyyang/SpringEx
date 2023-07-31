@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.healpio.mapper.AttachMapper;
 import com.healpio.mapper.ClassMapper;
 import com.healpio.vo.ClassVO;
-import com.healpio.vo.ExerciseVO;
 import com.healpio.service.AttachService;
 
 @Service
@@ -20,7 +20,10 @@ public class ClassServiceImpl implements ClassService {
 	ClassMapper classMapper;
 	
 	@Autowired
-	private AttachService attachService;
+	AttachService attachService;
+	
+	@Autowired
+	AttachMapper attachMapper;
 
 	@Override
 	public void getExerciseList(Model model) {
@@ -47,8 +50,40 @@ public class ClassServiceImpl implements ClassService {
 	}
 
 	@Override
-	public void getOne(String class_no, Model model) {
+	public void getOne(String class_no, String member_no, Model model) {
 		model.addAttribute("classVO", classMapper.getOne(class_no));
+		model.addAttribute("attachVO", attachMapper.getOne(class_no));
+		model.addAttribute("scrapYN", classMapper.scrapYN(class_no, member_no));
 	}
 
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int update(ClassVO classVO, List<MultipartFile> files) throws Exception {
+		int res = classMapper.update(classVO);
+		if(files!=null) {
+			attachService.fileupload(files, classVO.getClass_no());				
+		}		
+		return res;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int delete(String class_no, Model model) {
+		// 첨부파일 삭제
+		attachService.delete(class_no);
+		
+		// 글 삭제
+		return classMapper.delete(class_no);
+	}
+
+	@Override
+	public int scrap(String class_no, String member_no) {
+		return classMapper.scrap(class_no, member_no);
+	}
+
+	@Override
+	public int cancelScrap(String class_no, String member_no) {
+		return classMapper.cancelScrap(class_no, member_no);
+	}
+	
 }

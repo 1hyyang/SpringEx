@@ -21,7 +21,8 @@ import net.coobird.thumbnailator.Thumbnails;
 @Log4j
 public class AttachServiceImpl implements AttachService {
 	
-	public static final String ATTACHES_DIRECTORY = "C:/upload/";
+	// public static final String ATTACHES_DIRECTORY = "C:/upload/";
+	public static final String ATTACHES_DIRECTORY = "C:/Users/user/git/springEx/Healpio_hy/src/main/webapp/resources/images/";
 	
 	@Autowired
 	AttachMapper attachMapper;
@@ -69,10 +70,10 @@ public class AttachServiceImpl implements AttachService {
 				
 				// Thumbnailator 라이브러리 추가
 				// Mime 타입이 이미지인 경우 썸네일을 생성
-				if (contentType!=null && contentType.startsWith("image")) {
+				if(contentType!=null && contentType.startsWith("image")) {
 					// Thumbnails.of(원본파일).size(저장할크기).toFile(새파일)
 					// 디렉토리에 새 파일(썸네일) 저장
-					Thumbnails.of(sFile).size(100, 100)
+					Thumbnails.of(sFile).size(300, 300)
 						.toFile(ATTACHES_DIRECTORY 
 								+ uploadpath + "thumb_" + sFilename);
 
@@ -87,7 +88,7 @@ public class AttachServiceImpl implements AttachService {
 				attachVO.setUploadpath(uploadpath);
 				attachVO.setFilename(file.getOriginalFilename());
 				attachVO.setClass_no(class_no);
-				if (insert(attachVO)>0) {
+				if(insert(attachVO)>0) {
 					message = "등록되었습니다.";			
 				} 
 			} catch (IllegalStateException e) {
@@ -139,54 +140,40 @@ public class AttachServiceImpl implements AttachService {
 		return attachMapper.insert(attachVO);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 //	@Override
-//	public List<AttachVO> getList(int class_no) {
+//	public List<AttachVO> getList(String class_no) {
 //		return attachMapper.getList(class_no);
 //	}
 //
-//	@Override
-//	public int delete(String uuid, int class_no) {
-//		// 디렉토리에서 삭제
-//		AttachVO attachVO = attachMapper.selectOne(uuid, class_no);
-//		String filepath = attachVO.getFilepath();
-//		String thumb_filepath = attachVO.getThumb_filepath();
-//		
-//		if(filepath!=null && !"".equals(filepath)) {
-//			File file = new File(AttachController.ATTACHES_DIRECTORY + filepath);
-//			if(file.exists()) {
-//				// 파일 삭제
-//				// 메서드 실행 결과가 true가 아니라면
-//				if(!file.delete()) {
-//					System.err.println("파일 삭제 실패");
-//				}
-//			}
-//		}
-//		if(thumb_filepath!=null && !"".equals(thumb_filepath)) {
-//			File file = new File(AttachController.ATTACHES_DIRECTORY + thumb_filepath);
-//			if(file.exists()) {
-//				if(!file.delete()) {
-//					System.err.println("파일 삭제 실패");
-//				}
-//			}
-//		}
-//		
-//		// DB에서 삭제
-//		return attachMapper.delete(uuid, class_no);
-//	}
+	@Override
+	public int delete(String class_no) {
+		// 디렉토리에서 삭제
+		AttachVO attachVO = attachMapper.getOne(class_no);
+		String filepath = attachVO.getFilepath();
+		String thumb_filepath = attachVO.getThumb_filepath();
+		
+		if(filepath!=null && !"".equals(filepath)) {
+			File file = new File(ATTACHES_DIRECTORY + filepath);
+			if(file.exists()) {
+				// 파일 삭제
+				// 메서드 실행 결과가 true가 아니라면
+				if(!file.delete()) {
+					System.err.println("파일 삭제 실패");
+				}
+			}
+		}
+		if(thumb_filepath!=null && !"".equals(thumb_filepath)) {
+			File file = new File(ATTACHES_DIRECTORY + thumb_filepath);
+			if(file.exists()) {
+				if(!file.delete()) {
+					System.err.println("파일 삭제 실패");
+				}
+			}
+		}
+		
+		// DB에서 삭제
+		return attachMapper.delete(class_no);
+	}
 
 }
 

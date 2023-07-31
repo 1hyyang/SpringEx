@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,9 +19,13 @@ function go(url){
 	강의 지역 <input type="text" name="location_no" id="location_no" value="1"><br>
 	강의 이름 <input type="text" name="class_title" id="class_title" value="${classVO.class_title}">
 	<select name="exercise_no" id="exercise_no">
-		<option value="${classVO.exercise_name}">${classVO.exercise_name}</option>
 		<c:forEach items="${exerciseList}" var="exercise">
-		<option value="${exercise.exercise_no}">${exercise.exercise_name}</option>
+			<c:if test="${exercise.exercise_name eq classVO.exercise_name}">
+			<option value="${exercise.exercise_no}" selected>${exercise.exercise_name}</option>
+			</c:if>
+			<c:if test="${exercise.exercise_name ne classVO.exercise_name}">
+			<option value="${exercise.exercise_no}">${exercise.exercise_name}</option>
+			</c:if>
 		</c:forEach>
 	</select><br>
 	대표 사진 <input type="file" name="files" id="files" value=""><br>

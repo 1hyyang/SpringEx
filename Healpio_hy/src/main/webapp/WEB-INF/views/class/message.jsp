@@ -37,7 +37,7 @@
 					location.href='../class/#';
 				} else {
 					//location.href='../class/read?class_no=${class_no}&pageno=${pageno}&searchfield=${searchfield}&searchword=${searchword}';
-					location.href='../class/write';
+					location.href='../class/read?class_no=${class_no}';
 				}
 			})
 		}

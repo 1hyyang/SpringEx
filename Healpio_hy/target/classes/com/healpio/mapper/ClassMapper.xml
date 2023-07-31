@@ -28,4 +28,24 @@
   	set location_no = #{location_no}, exercise_no = #{exercise_no}, class_title = #{class_title}, class_content = #{class_content}, class_introduce = #{class_introduce}, teacher_content = #{teacher_content}, class_maxcount = #{class_maxcount}, class_price = #{class_price} 
   	where class_no = #{class_no}
   </update>
+  
+  <delete id="delete">
+  	delete from class where class_no = #{class_no}
+  </delete>
+  
+  <insert id="scrap">
+  	<selectKey keyProperty="scrap_no" order="BEFORE" resultType="String">
+  		select 'S'||lpad(seq_class.nextval, 6, '0') from dual
+	</selectKey>
+  	insert into scrap values 
+  	(#{scrap_no}, #{class_no}, #{member_no})
+  </insert>
+  
+  <delete id="cancelScrap">
+  	delete from scrap where class_no = #{class_no} and member_no = #{member_no}
+  </delete>
+  
+  <select id="scrapYN" resultType="int">
+  	select count(*) from scrap where class_no = #{class_no} and member_no = #{member_no}
+  </select>
 </mapper>
