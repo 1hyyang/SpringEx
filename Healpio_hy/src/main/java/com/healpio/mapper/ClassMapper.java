@@ -17,5 +17,6 @@ public interface ClassMapper {
 	public int scrap(@Param("class_no") String class_no, @Param("member_no") String member_no);
 	public int cancelScrap(@Param("class_no") String class_no, @Param("member_no") String member_no);
 	public int scrapYN(@Param("class_no") String class_no, @Param("member_no") String member_no);
+	public int deleteScrap(String class_no);
 	
 }

@@ -9,16 +9,26 @@
   	insert into attach
   	values (#{uuid}, #{uploadpath}, #{filename}, #{filetype}, #{class_no})
   </insert>
-
-  <delete id="delete">
-  	delete attach where class_no = #{class_no} 
-  </delete>
   
-  <select id="getOne" resultType="com.healpio.vo.AttachVO">
+  <select id="getList" resultType="com.healpio.vo.AttachVO">
   	select t.* 
   	, uploadpath||uuid||'_'||filename filepath 
   	, decode(filetype, 'I', uploadpath||'thumb_'||uuid||'_'||filename, '') thumb_filepath 
   	from attach t 
   	where class_no = #{class_no}
   </select>
+
+  <delete id="delete">
+  	delete from attach where class_no = #{class_no} 
+  </delete>
+  
+  <!-- 
+  <select id="selectOne" resultType="com.healpio.vo.AttachVO">
+  	select t.* 
+  	, uploadpath||uuid||'_'||filename filepath 
+  	, decode(filetype, 'I', uploadpath||'thumb_'||uuid||'_'||filename, '') thumb_filepath 
+  	from attach t 
+  	where uuid = #{uuid} and class_no = #{class_no}
+  </select>
+   -->
 </mapper>

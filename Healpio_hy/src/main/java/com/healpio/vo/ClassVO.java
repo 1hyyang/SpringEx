@@ -6,7 +6,6 @@ import lombok.Data;
 public class ClassVO {
 
 	private String class_no; 
-	private int location_no;
 	private String member_no;
 	private String exercise_no;	
 	private String class_title;

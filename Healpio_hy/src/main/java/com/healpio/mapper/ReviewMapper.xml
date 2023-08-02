@@ -4,19 +4,15 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <!-- mapper의 namespace 속성은 연결할 mapper의 interface를 풀 경로로 작성 -->
-<mapper namespace="com.healpio.mapper.ClassMapper">
-  <select id="getExerciseList" resultType="com.healpio.vo.ExerciseVO">
-  	select * from exercise
-  </select>
-  
+<mapper namespace="com.healpio.mapper.ReviewMapper">
   <insert id="insert">
-  	<selectKey keyProperty="class_no" order="BEFORE" resultType="String">
-  		select 'C'||lpad(seq_class.nextval, 6, '0') from dual
+  	<selectKey keyProperty="review_no" order="BEFORE" resultType="String">
+  		select 'r'||lpad(seq_class.nextval, 6, '0') from dual
 	</selectKey>
-  	insert into class values
-  	(#{class_no}, #{member_no}, #{exercise_no}, #{class_title}, #{class_content}, #{class_introduce}, sysdate, #{teacher_content}, #{class_maxcount}, #{class_price})
+  	insert into review values
+  	(#{review_no}, #{member_no}, #{class_no}, sysdate, #{review_content}, #{review_star})
   </insert>
-  
+  <!-- 
   <select id="getOne" resultType="com.healpio.vo.ClassVO">
   	select class_no, class_title, nickname, exercise_name, class_introduce, class_maxcount, class_content, class_price, teacher_content 
   	from class, member, exercise 
@@ -50,6 +46,7 @@
   </select>
   
   <delete id="deleteScrap">
-  	delete from scrap where class_no = #{class_no}
+  	delete from scrap where class_no = #{class__no}
   </delete>
+   -->
 </mapper>

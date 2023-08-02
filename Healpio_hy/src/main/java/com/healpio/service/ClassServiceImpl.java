@@ -52,7 +52,7 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public void getOne(String class_no, String member_no, Model model) {
 		model.addAttribute("classVO", classMapper.getOne(class_no));
-		model.addAttribute("attachVO", attachMapper.getOne(class_no));
+		model.addAttribute("attachList", attachMapper.getList(class_no));
 		model.addAttribute("scrapYN", classMapper.scrapYN(class_no, member_no));
 	}
 
@@ -60,9 +60,15 @@ public class ClassServiceImpl implements ClassService {
 	@Transactional(rollbackFor = Exception.class)
 	public int update(ClassVO classVO, List<MultipartFile> files) throws Exception {
 		int res = classMapper.update(classVO);
-		if(files!=null) {
-			attachService.fileupload(files, classVO.getClass_no());				
-		}		
+		
+		String msg = attachService.fileupload(files, classVO.getClass_no());
+		if("".equals(msg)) {
+			return res;
+		} else {
+			// (수정 전, 수정하면서) 등록된 파일 삭제 후 새로운 파일 등록
+			attachService.delete(classVO.getClass_no());
+			attachService.fileupload(files, classVO.getClass_no());
+		}
 		return res;
 	}
 
@@ -71,6 +77,9 @@ public class ClassServiceImpl implements ClassService {
 	public int delete(String class_no, Model model) {
 		// 첨부파일 삭제
 		attachService.delete(class_no);
+		
+		// 스크랩 삭제
+		classMapper.deleteScrap(class_no);
 		
 		// 글 삭제
 		return classMapper.delete(class_no);

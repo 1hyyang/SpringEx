@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,7 +63,7 @@ public class ClassController {
 	
 	@GetMapping("edit")
 	public void edit(String class_no, String member_no, Model model) {
-		classService.getOne(class_no, member_no, model);
+		classService.getOne(class_no, "M000002", model);
 		classService.getExerciseList(model);
 	}
 	
@@ -86,9 +84,9 @@ public class ClassController {
 			if(e.getMessage().indexOf("첨부파일")>-1) {
 				model.addAttribute("message", e.getMessage());
 			} else {
-				model.addAttribute("message", "수정 중 오류가 발생하였습니다.");
+				model.addAttribute("message", "첨부파일 수정 중 오류가 발생하였습니다.");
 			}
-			return "/board/message";
+			return "/class/message";
 		}
 	}
 	

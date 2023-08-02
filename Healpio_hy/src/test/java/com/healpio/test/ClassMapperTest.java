@@ -27,7 +27,6 @@ public class ClassMapperTest {
 //	@Test
 //	public void insert() {
 //		ClassVO classVO = new ClassVO();
-//		classVO.setLocation_no(1);
 //		classVO.setMember_no("M000002");
 //		classVO.setExercise_no("E000002");
 //		classVO.setClass_title("플로우 요가");
@@ -73,10 +72,15 @@ public class ClassMapperTest {
 //	public void cancelScrap() {
 //		classMapper.cancelScrap("C000009", "M000005");
 //	}
-	
+//	
+//	@Test
+//	public void scrapYN() {
+//		classMapper.scrapYN("C000009", "M000005");
+//	}
+//	
 	@Test
-	public void scrapYN() {
-		classMapper.scrapYN("C000009", "M000005");
+	public void deleteScrap() {
+		classMapper.deleteScrap("C000003");
 	}
 	
 }

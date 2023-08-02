@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiphop5782/score@latest/score.js"></script>
 <script src="https://kit.fontawesome.com/0aadd0de21.js" crossorigin="anonymous"></script>
 <script>
 function go(url){
@@ -51,10 +53,35 @@ function getEmptyheart(map){
 		alert(map.result);
 	}
 }
+
+$(function(){
+    $('.score').score({
+        starColor: "gold", //별 색상
+        backgroundColor: "transparent", //배경 색상
+        editable: true, //점수 변경 가능 여부
+        integerOnly: true, //정수만 설정 가능 여부
+        zeroAvailable:false,//0 설정 가능 여부
+        send:{
+            sendable:true,//전송 가능 여부
+            name:"review_star",//전송 가능할 경우 전송될 이름
+        },
+        display: {
+            showNumber: true, //설정된 숫자 표시 가능 여부
+            placeLimit: 1, //소수점 자리수 표시 길이
+            textColor:"black",//텍스트 색상
+        },
+        point: {
+            max: 5,//최대 점수(data-max로 대체 가능)
+            rate: 3,//실제 점수(data-rate로 대체 가능)
+        }
+    })
+});
 </script>
 </head>
 <body>
+<c:forEach items="${attachList}" var="attachVO">
 <img src='/resources/images/${attachVO.filepath}' alt='${classVO.class_title}' width='300px'><br>
+</c:forEach>
 ${classVO.class_title}<br>
 ${classVO.nickname}<br>
 ${classVO.exercise_name}<br>
@@ -69,9 +96,27 @@ ${classVO.class_introduce}<br>
 </div>
 <button type="button" onclick="go('/class/edit?class_no=${classVO.class_no}')">수정</button>
 <button type="button" onclick="go('/class/delete?class_no=${classVO.class_no}')">삭제</button><br>
+
+<!-- 강의 소개 -->
 ${classVO.class_content}<br>
 ${classVO.class_maxcount}<br>
 ${classVO.class_price}<br>
+
+<br><br><br><br>
+
+<!-- 강사 소개 -->
 ${classVO.teacher_content}<br>
+
+<br><br><br><br>
+
+<!-- 리뷰 -->
+리뷰 작성
+<form name="reviewForm" method="get" action="/review/write">
+	<div class='score' data-max='5'></div><br>
+	<input type="text" name="member_no" id="member_no" value="M000002">
+	<input type="text" name="class_no" id="class_no" value="${classVO.class_no}">
+	<input type="text" name="review_content" id="review_content">
+	<button type="submit">등록</button>
+</form>
 </body>
 </html>

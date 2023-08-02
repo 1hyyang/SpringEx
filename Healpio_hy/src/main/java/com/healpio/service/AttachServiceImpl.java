@@ -140,35 +140,37 @@ public class AttachServiceImpl implements AttachService {
 		return attachMapper.insert(attachVO);
 	}
 	
-//	@Override
-//	public List<AttachVO> getList(String class_no) {
-//		return attachMapper.getList(class_no);
-//	}
-//
+	@Override
+	public List<AttachVO> getList(String class_no) {
+		return attachMapper.getList(class_no);
+	}
+
 	@Override
 	public int delete(String class_no) {
 		// 디렉토리에서 삭제
-		AttachVO attachVO = attachMapper.getOne(class_no);
-		String filepath = attachVO.getFilepath();
-		String thumb_filepath = attachVO.getThumb_filepath();
-		
-		if(filepath!=null && !"".equals(filepath)) {
-			File file = new File(ATTACHES_DIRECTORY + filepath);
-			if(file.exists()) {
-				// 파일 삭제
-				// 메서드 실행 결과가 true가 아니라면
-				if(!file.delete()) {
-					System.err.println("파일 삭제 실패");
+		List<AttachVO> attachList = attachMapper.getList(class_no);
+		for(AttachVO attachVO:attachList) {
+			String filepath = attachVO.getFilepath();
+			String thumb_filepath = attachVO.getThumb_filepath();
+			
+			if(filepath!=null && !"".equals(filepath)) {
+				File file = new File(ATTACHES_DIRECTORY + filepath);
+				if(file.exists()) {
+					// 파일 삭제
+					// 메서드 실행 결과가 true가 아니라면
+					if(!file.delete()) {
+						System.err.println("파일 삭제 실패");
+					}
 				}
 			}
-		}
-		if(thumb_filepath!=null && !"".equals(thumb_filepath)) {
-			File file = new File(ATTACHES_DIRECTORY + thumb_filepath);
-			if(file.exists()) {
-				if(!file.delete()) {
-					System.err.println("파일 삭제 실패");
+			if(thumb_filepath!=null && !"".equals(thumb_filepath)) {
+				File file = new File(ATTACHES_DIRECTORY + thumb_filepath);
+				if(file.exists()) {
+					if(!file.delete()) {
+						System.err.println("파일 삭제 실패");
+					}
 				}
-			}
+			}			
 		}
 		
 		// DB에서 삭제

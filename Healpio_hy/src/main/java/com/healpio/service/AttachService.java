@@ -13,6 +13,7 @@ public interface AttachService {
 	public String fileupload(List<MultipartFile> files, String class_no) throws Exception;
 	public String getUploadpath();
 	int insert(AttachVO attachVO);
+	List<AttachVO> getList(String class_no);
 	int delete(String class_no);
 	
 }

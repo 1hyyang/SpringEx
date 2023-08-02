@@ -14,7 +14,7 @@
   		select 'C'||lpad(seq_class.nextval, 6, '0') from dual
 	</selectKey>
   	insert into class values
-  	(#{class_no}, #{location_no}, #{member_no}, #{exercise_no}, #{class_title}, #{class_content}, #{class_introduce}, sysdate, #{teacher_content}, #{class_maxcount}, #{class_price})
+  	(#{class_no}, #{member_no}, #{exercise_no}, #{class_title}, #{class_content}, #{class_introduce}, sysdate, #{teacher_content}, #{class_maxcount}, #{class_price})
   </insert>
   
   <select id="getOne" resultType="com.healpio.vo.ClassVO">
@@ -25,7 +25,7 @@
   
   <update id="update">
   	update class 
-  	set location_no = #{location_no}, exercise_no = #{exercise_no}, class_title = #{class_title}, class_content = #{class_content}, class_introduce = #{class_introduce}, teacher_content = #{teacher_content}, class_maxcount = #{class_maxcount}, class_price = #{class_price} 
+  	set exercise_no = #{exercise_no}, class_title = #{class_title}, class_content = #{class_content}, class_introduce = #{class_introduce}, teacher_content = #{teacher_content}, class_maxcount = #{class_maxcount}, class_price = #{class_price} 
   	where class_no = #{class_no}
   </update>
   
@@ -48,4 +48,8 @@
   <select id="scrapYN" resultType="int">
   	select count(*) from scrap where class_no = #{class_no} and member_no = #{member_no}
   </select>
+  
+  <delete id="deleteScrap">
+  	delete from scrap where class_no = #{class_no}
+  </delete>
 </mapper>
